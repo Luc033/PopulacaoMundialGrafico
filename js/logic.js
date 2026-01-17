@@ -4,15 +4,12 @@ const url =
 fetch(url)
   .then((res) => res.json())
   .then((paises) => {
-    // Ordenar e pegar o Top 10
     paises.sort((a, b) => b.population - a.population);
     const top10 = paises.slice(0, 10);
 
-    // Preparar dados
     const nomes = top10.map((pais) => pais.translations.por.common);
     const populacoes = top10.map((pais) => pais.population);
 
-    // Gerar lista da média
     const mediaValor = calcularMedia(top10);
     const medias = new Array(10).fill(mediaValor);
 
@@ -39,22 +36,22 @@ function criarGrafico(nomes, populacoes, medias) {
   const ctx = document.getElementById("meuGrafico");
 
   new Chart(ctx, {
-    type: "bar", // Tipo base
+    type: "bar",
     data: {
       labels: nomes,
       datasets: [
         {
-          type: "line", // Média (Linha)
+          type: "line",
           label: "Média de População",
           data: medias,
           borderColor: "red",
           borderWidth: 3,
           fill: false,
-          pointRadius: 0, // Remove as bolinhas da linha
+          pointRadius: 0, 
           order: 0,
         },
         {
-          type: "bar", // Países (Barras)
+          type: "bar", 
           label: "População",
           data: populacoes,
           backgroundColor: gerarCores(),
@@ -67,14 +64,13 @@ function criarGrafico(nomes, populacoes, medias) {
       ],
     },
     options: {
-      maintainAspectRatio: false, // O segredo da altura!
+      maintainAspectRatio: false,
       scales: {
         y: {
           beginAtZero: true,
           ticks: {
             maxTicksLimit: 12,
             color: "#666",
-            // Formata os números para "B" (Bilhões) ou "M" (Milhões)
             callback: function (value) {
               if (value >= 1e9) return (value / 1e9).toFixed(1) + " B";
               if (value >= 1e6) return (value / 1e6).toFixed(0) + " Mi";
